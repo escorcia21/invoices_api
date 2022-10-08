@@ -1,8 +1,12 @@
-import invoicesRouter from './routes/invoices.route.js';
-import { Router } from "express"
+import { Router } from 'express'
+import invoicesRouter from './routes/invoices.route.js'
+import productsRouter from './routes/products.route.js'
+import clientsRouter from './routes/clients.route.js'
 
 export default function ( app ) {
     const router = Router()
-    app.use('/invoices', router)
-    router.use('/', invoicesRouter)
+    app.use('/EdgeAPP', router)
+    router.use('/invoices', invoicesRouter)
+    router.use('/products', productsRouter)
+    router.use('/clients', clientsRouter)
 }
