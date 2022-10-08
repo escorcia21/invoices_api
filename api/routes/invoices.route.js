@@ -1,13 +1,9 @@
 import { Router } from "express"
+import { getInvoices, createInvoice } from "../controllers/invoices.controller.js"
 
 const router = Router()
 
-router.get('/', (req, res) => {
-    res.send('Invoices list')
-})
-
-router.post('/', (req, res) => {
-    res.send('Invoice created')
-})
+router.get('/', getInvoices)
+router.post('/', createInvoice)
 
 export default router
