@@ -1,11 +1,11 @@
 import { initDatabase } from "./loaders/sequelize.js"
 import dotenv from "dotenv"
-import { app } from "./app.js"
-
-const port = process.env.PORT || 3000
-dotenv.config()
+import app from "./app.js"
 
 async function main() {
+    dotenv.config()
+    const port = process.env.PORT || 5500
+
     try {
         const sequelize = initDatabase()
         await sequelize.authenticate()
