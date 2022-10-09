@@ -17,6 +17,10 @@ export const Invoice = sequelize.define('invoice', {
     discount: {
         type: DataTypes.DOUBLE,
         allowNull: false
+    },
+    total: {
+        type: DataTypes.DOUBLE,
+        allowNull: false
     }
 }, 
 {

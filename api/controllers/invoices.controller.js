@@ -1,12 +1,19 @@
 import { Invoice } from '../../models/invoice.model.js'
+import { InvoiceDetail } from '../../models/invoice_detail.model.js'
+import { Product } from '../../models/product.model.js'
 
-export const getInvoices = async (req, res) => {
+export const getInvoices = async (req, res, next) => {
     try {
-        const clients = await Invoice.findAll()
+        const invoices = await Invoice.findAll({
+            include: {
+                model: InvoiceDetail,
+                include: Product
+            }
+        })
         res.status(200).json(
             {
                 estatus: 200,
-                results: clients
+                results: invoices
             }
         )
     } catch (err) {
