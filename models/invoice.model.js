@@ -1,6 +1,5 @@
 import { DataTypes } from 'sequelize'
 import { sequelize } from '../loaders/sequelize.js'
-import { Client } from './client.model.js'
 
 export const Invoice = sequelize.define('invoice', {
     invoice_number: {
