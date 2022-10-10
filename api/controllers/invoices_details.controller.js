@@ -1,4 +1,7 @@
 import { InvoiceDetail } from '../../models/invoice_detail.model.js'
+import { QueryTypes } from 'sequelize'
+import {v4 as uuid} from 'uuid'
+import { Product } from '../../models/product.model.js'
 
 export const getInvoiceDetail = async (req, res) => {
     try {
@@ -23,17 +26,33 @@ export const getInvoiceDetail = async (req, res) => {
 
 export const createInvoiceDetail = async (req, res, next) => {
     try {
-        const { detailID, quantity, total, invoiceID, productID }  = req.body
-        await InvoiceDetail.create({
-            detailID,
-            quantity,
-            total,
-            invoiceID,
-            productID
-        })
+        const detailID = uuid()
+        const { invoiceID, products }  = req.body
+        // create a bulkCreate for invoice details with a select query to get the product price
+        const query = `SELECT price FROM products WHERE productID = ?`
+        const details = await Promise.all(products.map(async (product) => {
+            const { productID, quantity } = product
+            const [ productPrice ] = await Product.sequelize.query(query, {
+                replacements: [productID],
+                type: QueryTypes.SELECT
+            })
+
+            return {
+                detailID,
+                invoiceID,
+                productID,
+                quantity,
+                total: productPrice.price * quantity 
+            }
+        }))
+
+
+        const result = await InvoiceDetail.bulkCreate(details)
+        
         res.status(201).json({
             estatus: 201,
             message: 'Details created successfully',
+            result
         })
     } catch (err) {
         next(err)

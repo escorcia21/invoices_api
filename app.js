@@ -3,7 +3,7 @@ import routes from './api/index.js'
 import express from 'express'
 import cors from 'cors'
 
-const whitelist = ['http://127.0.0.1:3000']
+const whitelist = ['http://127.0.0.1:3000', 'http://127.0.0.1:5173']
 
 // Configure CORS
 const options = {

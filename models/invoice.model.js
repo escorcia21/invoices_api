@@ -10,18 +10,10 @@ export const Invoice = sequelize.define('invoice', {
         type: DataTypes.DATE,
         allowNull: false
     },
-    subtotal: {
-        type: DataTypes.DOUBLE,
-        allowNull: false
-    },
     discount: {
         type: DataTypes.DOUBLE,
         allowNull: false
     },
-    total: {
-        type: DataTypes.DOUBLE,
-        allowNull: false
-    }
 }, 
 {
     timestamps: false

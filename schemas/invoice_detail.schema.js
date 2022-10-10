@@ -1,15 +1,17 @@
 import Joi from 'joi'
 
-const detailID = Joi.string().min(1).max(255)
-const invoiceID = Joi.string().min(1).max(255)
+const invoiceID = Joi.string().uuid()
 const productID = Joi.string().min(1).max(255)
 const quantity = Joi.number()
-const total = Joi.number()
 
-export const detailCreateSchema = Joi.object({
-    detailID: detailID.required(),
-    invoiceID: invoiceID.required(),
+const productDetailShema = Joi.object({
     productID: productID.required(),
     quantity: quantity.required(),
-    total: total.required()
+})
+
+
+const products = Joi.array().items(productDetailShema).min(1)
+export const detailCreateSchema = Joi.object({
+    invoiceID: invoiceID.required(),
+    products: products.required(),
 })
