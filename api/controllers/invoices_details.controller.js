@@ -6,11 +6,17 @@ import { Product } from '../../models/product.model.js'
 export const getInvoiceDetail = async (req, res) => {
     try {
         const { id } = req.params
-        const details = await InvoiceDetail.findOne(
+        const details = await InvoiceDetail.findAll(
             {
                 where: {
                     invoiceID: id
-                }
+                },
+                include:[
+                    {
+                        model: Product,
+                        attributes: ['product_name'],
+                    }
+                ]
             }
         )
         res.status(200).json(
