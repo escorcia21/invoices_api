@@ -26,9 +26,7 @@ export const getInvoiceDetail = async (req, res) => {
 
 export const createInvoiceDetail = async (req, res, next) => {
     try {
-        const detailID = uuid()
         const { invoiceID, products }  = req.body
-        // create a bulkCreate for invoice details with a select query to get the product price
         const query = `SELECT price FROM products WHERE productID = ?`
         const details = await Promise.all(products.map(async (product) => {
             const { productID, quantity } = product
@@ -38,7 +36,7 @@ export const createInvoiceDetail = async (req, res, next) => {
             })
 
             return {
-                detailID,
+                detailID: uuid(),
                 invoiceID,
                 productID,
                 quantity,

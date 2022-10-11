@@ -1,16 +1,29 @@
 import { Invoice } from '../../models/invoice.model.js'
-import { InvoiceDetail } from '../../models/invoice_detail.model.js'
-import { Product } from '../../models/product.model.js'
+import { QueryTypes } from 'sequelize'
 import { v4 as uuid } from 'uuid'
 
 export const getInvoices = async (req, res, next) => {
-    console.log('getInvoices')
     try {
-        const invoices = await Invoice.findAll({
-            include: {
-                model: InvoiceDetail,
-                include: Product
-            }
+        const query = `
+            SELECT  invoices.invoice_number, 
+                clients.client_name,
+                invoices.date as "date",
+                invoices.discount,
+                subtotal.subtotal,
+                (subtotal.subtotal - (subtotal.subtotal*invoices.discount/100)) as "total"
+                FROM clients
+            JOIN invoices ON invoices.clientID=clients.clientID
+            JOIN (
+            	SELECT 
+               SUM(total) as "subtotal", 
+               invoiceID as "id" 
+               FROM invoice_details 
+               GROUP BY invoiceID
+               ) subtotal
+            ON subtotal.id=invoices.invoice_number
+        `
+        const invoices = await Invoice.sequelize.query(query,{
+            type: QueryTypes.SELECT
         })
         res.status(200).json(
             {
